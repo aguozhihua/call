@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 定义箭头标记 -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+    
+    <!-- 定义虚线箭头标记 -->
+    <marker id="dashedArrow" markerWidth="10" markerHeight="7" 
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ff6b6b" />
+    </marker>
+    
+    <!-- 定义样式 -->
+    <style>
+      .start-end { fill: #90EE90; stroke: #333; stroke-width: 2; }
+      .process { fill: #87CEEB; stroke: #333; stroke-width: 2; }
+      .decision { fill: #F0E68C; stroke: #333; stroke-width: 2; }
+      .error { fill: #FFA07A; stroke: #333; stroke-width: 2; }
+      .text { font-family: Arial, sans-serif; font-size: 12px; text-anchor: middle; }
+      .small-text { font-family: Arial, sans-serif; font-size: 10px; text-anchor: middle; }
+      .line { stroke: #333; stroke-width: 2; marker-end: url(#arrowhead); }
+      .dashed-line { stroke: #ff6b6b; stroke-width: 2; stroke-dasharray: 5,5; marker-end: url(#dashedArrow); }
+    </style>
+  </defs>
+  
+  <!-- 开始节点 -->
+  <rect x="350" y="20" width="100" height="40" rx="20" class="start-end"/>
+  <text x="400" y="45" class="text">开始</text>
+  
+  <!-- 设置追踪ID -->
+  <rect x="325" y="100" width="150" height="40" class="process"/>
+  <text x="400" y="125" class="text">设置MDC追踪ID</text>
+  
+  <!-- 设置呼叫类型 -->
+  <rect x="300" y="180" width="200" height="40" class="process"/>
+  <text x="400" y="205" class="text">设置呼叫类型为SecondSale</text>
+  
+  <!-- 决策：是否二销摘机 -->
+  <polygon points="400,260 480,300 400,340 320,300" class="decision"/>
+  <text x="400" y="305" class="text">是否二销摘机?</text>
+  
+  <!-- 摘机应答 -->
+  <rect x="150" y="380" width="120" height="40" class="process"/>
+  <text x="210" y="405" class="text">call.answer()</text>
+  <text x="210" y="420" class="small-text">摘机应答</text>
+  
+  <!-- 振铃提醒 -->
+  <rect x="530" y="380" width="120" height="40" class="process"/>
+  <text x="590" y="405" class="text">call.alert()</text>
+  <text x="590" y="420" class="small-text">振铃提醒</text>
+  
+  <!-- 等待200ms -->
+  <rect x="325" y="480" width="150" height="40" class="process"/>
+  <text x="400" y="505" class="text">等待200毫秒</text>
+  
+  <!-- 获取彩铃 -->
+  <rect x="300" y="560" width="200" height="40" class="process"/>
+  <text x="400" y="585" class="text">获取默认彩铃 aj.wav</text>
+  
+  <!-- 播放彩铃 -->
+  <rect x="300" y="640" width="200" height="40" class="process"/>
+  <text x="400" y="665" class="text">播放彩铃30秒</text>
+  
+  <!-- 决策：呼叫状态检查 -->
+  <polygon points="400,720 480,760 400,800 320,760" class="decision"/>
+  <text x="400" y="760" class="text">呼叫状态</text>
+  <text x="400" y="775" class="text">非空闲?</text>
+  
+  <!-- 挂机 -->
+  <rect x="150" y="840" width="120" height="40" class="process"/>
+  <text x="210" y="865" class="text">call.onHook()</text>
+  
+  <!-- 跳过挂机 -->
+  <rect x="530" y="840" width="120" height="40" class="process"/>
+  <text x="590" y="865" class="text">跳过挂机</text>
+  
+  <!-- 创建话单 -->
+  <rect x="325" y="920" width="150" height="40" class="process"/>
+  <text x="400" y="945" class="text">创建TalkNote话单</text>
+  
+  <!-- 设置话单类型 -->
+  <rect x="300" y="1000" width="200" height="40" class="process"/>
+  <text x="400" y="1025" class="text">设置talkType=6</text>
+  
+  <!-- 保存话单 -->
+  <rect x="325" y="1080" width="150" height="40" class="process"/>
+  <text x="400" y="1105" class="text">保存话单和任务</text>
+  
+  <!-- 结束 -->
+  <rect x="350" y="1160" width="100" height="40" rx="20" class="start-end"/>
+  <text x="400" y="1185" class="text">结束</text>
+  
+  <!-- 异常处理 -->
+  <rect x="50" y="600" width="120" height="40" class="error"/>
+  <text x="110" y="625" class="text">异常处理</text>
+  
+  <!-- 连接线 -->
+  <!-- 主流程线 -->
+  <line x1="400" y1="60" x2="400" y2="100" class="line"/>
+  <line x1="400" y1="140" x2="400" y2="180" class="line"/>
+  <line x1="400" y1="220" x2="400" y2="260" class="line"/>
+  
+  <!-- 决策分支 -->
+  <line x1="320" y1="300" x2="210" y2="380" class="line"/>
+  <line x1="480" y1="300" x2="590" y2="380" class="line"/>
+  
+  <!-- 汇聚到等待 -->
+  <line x1="210" y1="420" x2="400" y2="480" class="line"/>
+  <line x1="590" y1="420" x2="400" y2="480" class="line"/>
+  
+  <!-- 继续主流程 -->
+  <line x1="400" y1="520" x2="400" y2="560" class="line"/>
+  <line x1="400" y1="600" x2="400" y2="640" class="line"/>
+  <line x1="400" y1="680" x2="400" y2="720" class="line"/>
+  
+  <!-- 第二个决策分支 -->
+  <line x1="320" y1="760" x2="210" y2="840" class="line"/>
+  <line x1="480" y1="760" x2="590" y2="840" class="line"/>
+  
+  <!-- 汇聚到创建话单 -->
+  <line x1="210" y1="880" x2="400" y2="920" class="line"/>
+  <line x1="590" y1="880" x2="400" y2="920" class="line"/>
+  
+  <!-- 最后流程 -->
+  <line x1="400" y1="960" x2="400" y2="1000" class="line"/>
+  <line x1="400" y1="1040" x2="400" y2="1080" class="line"/>
+  <line x1="400" y1="1120" x2="400" y2="1160" class="line"/>
+  
+  <!-- 异常处理虚线 -->
+  <line x1="325" y1="125" x2="170" y2="600" class="dashed-line"/>
+  <line x1="300" y1="205" x2="170" y2="600" class="dashed-line"/>
+  <line x1="150" y1="400" x2="170" y2="600" class="dashed-line"/>
+  <line x1="530" y1="400" x2="170" y2="600" class="dashed-line"/>
+  
+  <!-- 标签文字 -->
+  <text x="250" y="350" class="small-text">是</text>
+  <text x="550" y="350" class="small-text">否</text>
+  <text x="250" y="810" class="small-text">是</text>
+  <text x="550" y="810" class="small-text">否</text>
+  
+  <!-- 标题 -->
+  <text x="400" y="15" class="text" style="font-size: 16px; font-weight: bold;">SecondSaleProcessThread 流程图</text>
+</svg>
