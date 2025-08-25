@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="1400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .start-end { fill: #e1f5fe; stroke: #01579b; stroke-width: 2; }
+      .process { fill: #f3e5f5; stroke: #4a148c; stroke-width: 2; }
+      .decision { fill: #fff3e0; stroke: #e65100; stroke-width: 2; }
+      .success { fill: #e8f5e8; stroke: #1b5e20; stroke-width: 2; }
+      .failure { fill: #ffebee; stroke: #b71c1c; stroke-width: 2; }
+      .text { font-family: Arial, sans-serif; font-size: 12px; text-anchor: middle; dominant-baseline: middle; }
+      .title { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; text-anchor: middle; }
+      .arrow { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #333; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="600" y="30" class="title" style="font-size: 18px;">answerOrAlert 方法流程图</text>
+  
+  <!-- Start -->
+  <rect x="500" y="60" width="200" height="40" rx="20" class="start-end"/>
+  <text x="600" y="80" class="text">开始 answerOrAlert</text>
+  
+  <!-- Decision: Check conditions -->
+  <polygon points="600,140 700,180 600,220 500,180" class="decision"/>
+  <text x="600" y="175" class="text">检查预摘机条件</text>
+  <text x="600" y="190" class="text" style="font-size: 10px;">isPreOffhook() && </text>
+  <text x="600" y="205" class="text" style="font-size: 10px;">!isAutoTestCaller()</text>
+  
+  <!-- Arrow from start to decision -->
+  <line x1="600" y1="100" x2="600" y2="140" class="arrow"/>
+  
+  <!-- Pre-offhook branch (TRUE) -->
+  <!-- Log message -->
+  <rect x="200" y="280" width="180" height="50" rx="5" class="process"/>
+  <text x="290" y="300" class="text" style="font-size: 11px;">记录日志:</text>
+  <text x="290" y="315" class="text" style="font-size: 11px;">开通预摘机功能</text>
+  
+  <!-- Answer sync call -->
+  <rect x="200" y="360" width="180" height="50" rx="5" class="process"/>
+  <text x="290" y="380" class="text" style="font-size: 11px;">调用 answerSync</text>
+  <text x="290" y="395" class="text" style="font-size: 11px;">(超时3000ms)</text>
+  
+  <!-- Wait for completion -->
+  <rect x="200" y="440" width="180" height="40" rx="5" class="process"/>
+  <text x="290" y="460" class="text" style="font-size: 11px;">等待摘机完成</text>
+  
+  <!-- Log status -->
+  <rect x="200" y="510" width="180" height="40" rx="5" class="process"/>
+  <text x="290" y="530" class="text" style="font-size: 11px;">记录摘机状态</text>
+  
+  <!-- Check call state -->
+  <polygon points="290,590 370,620 290,650 210,620" class="decision"/>
+  <text x="290" y="615" class="text" style="font-size: 10px;">状态检查</text>
+  <text x="290" y="630" class="text" style="font-size: 10px;">CALL_CONTENT?</text>
+  
+  <!-- Success return -->
+  <rect x="120" y="700" width="100" height="40" rx="5" class="success"/>
+  <text x="170" y="720" class="text">返回 1 (成功)</text>
+  
+  <!-- Failure return -->
+  <rect x="360" y="700" width="100" height="40" rx="5" class="failure"/>
+  <text x="410" y="720" class="text">返回 0 (失败)</text>
+  
+  <!-- Alert branch (FALSE) -->
+  <!-- Log message -->
+  <rect x="820" y="280" width="180" height="50" rx="5" class="process"/>
+  <text x="910" y="300" class="text" style="font-size: 11px;">记录日志:</text>
+  <text x="910" y="315" class="text" style="font-size: 11px;">未开通预摘机</text>
+  
+  <!-- Start alert -->
+  <rect x="820" y="360" width="180" height="40" rx="5" class="process"/>
+  <text x="910" y="380" class="text" style="font-size: 11px;">调用 alert() 启动振铃</text>
+  
+  <!-- Wait 500ms -->
+  <rect x="820" y="430" width="180" height="40" rx="5" class="process"/>
+  <text x="910" y="450" class="text" style="font-size: 11px;">等待 500ms</text>
+  
+  <!-- First state check -->
+  <polygon points="910,510 980,540 910,570 840,540" class="decision"/>
+  <text x="910" y="535" class="text" style="font-size: 10px;">第一次检查</text>
+  <text x="910" y="550" class="text" style="font-size: 10px;">CALL_ALERT?</text>
+  
+  <!-- Wait 1000ms (first) -->
+  <rect x="1020" y="520" width="120" height="40" rx="5" class="process"/>
+  <text x="1080" y="540" class="text" style="font-size: 11px;">等待 1000ms</text>
+  
+  <!-- Second state check -->
+  <polygon points="1080,600 1150,630 1080,660 1010,630" class="decision"/>
+  <text x="1080" y="625" class="text" style="font-size: 10px;">第二次检查</text>
+  <text x="1080" y="640" class="text" style="font-size: 10px;">CALL_ALERT?</text>
+  
+  <!-- Wait 1000ms (second) -->
+  <rect x="1020" y="700" width="120" height="40" rx="5" class="process"/>
+  <text x="1080" y="720" class="text" style="font-size: 11px;">等待 1000ms</text>
+  
+  <!-- Log alert status -->
+  <rect x="820" y="780" width="180" height="40" rx="5" class="process"/>
+  <text x="910" y="800" class="text" style="font-size: 11px;">记录振铃状态</text>
+  
+  <!-- Final state check -->
+  <polygon points="910,860 980,890 910,920 840,890" class="decision"/>
+  <text x="910" y="885" class="text" style="font-size: 10px;">最终状态</text>
+  <text x="910" y="900" class="text" style="font-size: 10px;">CALL_ALERT?</text>
+  
+  <!-- Alert success -->
+  <rect x="740" y="970" width="100" height="40" rx="5" class="success"/>
+  <text x="790" y="990" class="text">返回 1 (成功)</text>
+  
+  <!-- Alert failure -->
+  <rect x="980" y="970" width="100" height="40" rx="5" class="failure"/>
+  <text x="1030" y="990" class="text">返回 0 (失败)</text>
+  
+  <!-- End -->
+  <rect x="500" y="1050" width="200" height="40" rx="20" class="start-end"/>
+  <text x="600" y="1070" class="text">方法结束</text>
+  
+  <!-- Arrows for pre-offhook branch -->
+  <line x1="550" y1="180" x2="290" y2="280" class="arrow"/>
+  <text x="400" y="220" class="label">TRUE</text>
+  
+  <line x1="290" y1="330" x2="290" y2="360" class="arrow"/>
+  <line x1="290" y1="410" x2="290" y2="440" class="arrow"/>
+  <line x1="290" y1="480" x2="290" y2="510" class="arrow"/>
+  <line x1="290" y1="550" x2="290" y2="590" class="arrow"/>
+  
+  <line x1="250" y1="620" x2="170" y2="700" class="arrow"/>
+  <text x="200" y="650" class="label">YES</text>
+  
+  <line x1="330" y1="620" x2="410" y2="700" class="arrow"/>
+  <text x="380" y="650" class="label">NO</text>
+  
+  <!-- Arrows for alert branch -->
+  <line x1="650" y1="180" x2="910" y2="280" class="arrow"/>
+  <text x="800" y="220" class="label">FALSE</text>
+  
+  <line x1="910" y1="330" x2="910" y2="360" class="arrow"/>
+  <line x1="910" y1="400" x2="910" y2="430" class="arrow"/>
+  <line x1="910" y1="470" x2="910" y2="510" class="arrow"/>
+  
+  <line x1="980" y1="540" x2="1020" y2="540" class="arrow"/>
+  <text x="1000" y="530" class="label">NO</text>
+  
+  <line x1="1080" y1="560" x2="1080" y2="600" class="arrow"/>
+  
+  <line x1="1080" y1="660" x2="1080" y2="700" class="arrow"/>
+  <text x="1090" y="680" class="label">NO</text>
+  
+  <line x1="1080" y1="740" x2="910" y2="780" class="arrow"/>
+  <line x1="1010" y1="630" x2="910" y2="780" class="arrow"/>
+  <text x="950" y="700" class="label">YES</text>
+  
+  <line x1="840" y1="540" x2="910" y2="780" class="arrow"/>
+  <text x="860" y="650" class="label">YES</text>
+  
+  <line x1="910" y1="820" x2="910" y2="860" class="arrow"/>
+  
+  <line x1="870" y1="890" x2="790" y2="970" class="arrow"/>
+  <text x="820" y="920" class="label">YES</text>
+  
+  <line x1="950" y1="890" x2="1030" y2="970" class="arrow"/>
+  <text x="1000" y="920" class="label">NO</text>
+  
+  <!-- Arrows to end -->
+  <line x1="170" y1="740" x2="550" y2="1050" class="arrow"/>
+  <line x1="410" y1="740" x2="550" y2="1050" class="arrow"/>
+  <line x1="790" y1="1010" x2="600" y2="1050" class="arrow"/>
+  <line x1="1030" y1="1010" x2="650" y2="1050" class="arrow"/>
+  
+  <!-- Legend -->
+  <rect x="50" y="1150" width="300" height="200" rx="5" fill="#f9f9f9" stroke="#ccc" stroke-width="1"/>
+  <text x="200" y="1170" class="title" style="font-size: 14px;">状态常量说明</text>
+  
+  <text x="70" y="1195" class="text" style="font-size: 11px; text-anchor: start;">CALL_IDLE = 0 (空闲)</text>
+  <text x="70" y="1215" class="text" style="font-size: 11px; text-anchor: start;">CALL_MAKING = 1 (呼叫中)</text>
+  <text x="70" y="1235" class="text" style="font-size: 11px; text-anchor: start;">CALL_ALERT = 2 (振铃)</text>
+  <text x="70" y="1255" class="text" style="font-size: 11px; text-anchor: start;">CALL_CONTENT = 3 (通话中)</text>
+  
+  <text x="70" y="1285" class="text" style="font-size: 11px; text-anchor: start;">返回值: 1=成功, 0=失败</text>
+  
+  <text x="70" y="1315" class="text" style="font-size: 11px; text-anchor: start;">预摘机: 3秒超时, 直接建立连接</text>
+  <text x="70" y="1335" class="text" style="font-size: 11px; text-anchor: start;">振铃: 500ms + 2次1秒重试</text>
+</svg>
